@@ -12,12 +12,9 @@ type Task struct {
 	Completed bool      `json:"completed"`
 }
 
-var taskIDCounter = 0
-
-func NewTask(name string) *Task {
-	taskIDCounter++
+func NewTask(id int, name string) *Task {
 	return &Task{
-		ID:        taskIDCounter,
+		ID:        id,
 		Name:      name,
 		CreatedAt: time.Now(),
 		Completed: false,
@@ -35,4 +32,14 @@ func (t *Task) UpdateName(name string) error {
 	}
 	t.Name = name
 	return nil
+}
+
+func getNextTaskID(tasks []*Task) int {
+	maxID := 0
+	for _, task := range tasks {
+		if task.ID > maxID {
+			maxID = task.ID
+		}
+	}
+	return maxID + 1
 }
